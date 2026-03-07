@@ -1,5 +1,7 @@
 # 🍱 Bento Releases
 
+> **⚠️ Beta** — Bento is under active development. APIs and config format may change.
+
 Public release binaries for **Bento** — a terminal UI for managing multi-service projects.
 
 Define your tasks in a single `bento.yaml`, then launch an interactive dashboard to start, stop, restart, and monitor everything at once. Built with [Bubble Tea](https://github.com/charmbracelet/bubbletea) and [Lip Gloss](https://github.com/charmbracelet/lipgloss).
@@ -203,14 +205,15 @@ theme:
 
 `bento init` scans your project for known markers and generates a starter `bento.yaml`:
 
-| Marker | Detected as |
-|---|---|
-| `package.json` | npm |
-| `Cargo.toml` | Cargo |
-| `go.mod` | Go |
-| `Makefile` | Make |
-| `pyproject.toml` | Python |
-| `Gemfile` | Ruby |
+| Marker | Detected as | Tasks |
+|---|---|---|
+| `package.json` | npm | dev, build, test, lint |
+| `Cargo.toml` | Cargo | build, test, lint (clippy) |
+| `go.mod` | Go | build, test |
+| `Package.swift` | Swift | build, test |
+| `Makefile` | Make | build |
+| `pyproject.toml` | Python | test |
+| `Gemfile` | Ruby | test |
 
 Use `--force` to overwrite an existing config.
 
