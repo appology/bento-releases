@@ -61,7 +61,24 @@ install_from_release() {
   tag="$(printf '%s' "$release_json" | grep '"tag_name"' | head -1 | sed 's/.*"tag_name": *"//;s/".*//')"
   [ -z "$tag" ] && return 1
 
-  # Try common archive naming patterns
+  # On macOS, prefer .pkg (has stapled notarization ticket)
+  if [ "$OS" = "darwin" ]; then
+    local pkg_name="${BINARY}_${OS}_${ARCH}.pkg"
+    local pkg_url
+    pkg_url="$(printf '%s' "$release_json" | grep "browser_download_url" | grep "$pkg_name" | head -1 | sed 's/.*"browser_download_url": *"//;s/".*//')"
+    if [ -n "$pkg_url" ]; then
+      info "Downloading ${BINARY} ${tag} for ${OS}/${ARCH}..."
+      local tmpdir
+      tmpdir="$(mktemp -d)"
+      trap 'rm -rf "$tmpdir"' EXIT
+      local downloaded="${tmpdir}/${pkg_name}"
+      download "$pkg_url" "$downloaded"
+      install_binary_pkg "$downloaded" "$tag"
+      return 0
+    fi
+  fi
+
+  # Try .tar.gz (Linux, or macOS fallback)
   local asset_name="${BINARY}_${OS}_${ARCH}.tar.gz"
   local asset_url
   asset_url="$(printf '%s' "$release_json" | grep "browser_download_url" | grep "$asset_name" | head -1 | sed 's/.*"browser_download_url": *"//;s/".*//')"
@@ -75,6 +92,7 @@ install_from_release() {
   [ -z "$asset_url" ] && return 1
 
   info "Downloading ${BINARY} ${tag} for ${OS}/${ARCH}..."
+  local tmpdir
   tmpdir="$(mktemp -d)"
   trap 'rm -rf "$tmpdir"' EXIT
 
@@ -112,6 +130,14 @@ install_from_go() {
   fi
 
   return 1
+}
+
+install_binary_pkg() {
+  local src="$1" tag="${2:-}"
+  info "Installing ${BINARY}${tag:+ ${tag}} via package installer..."
+  sudo installer -pkg "$src" -target /
+  info "Installed ${BINARY}${tag:+ ${tag}} to ${INSTALL_DIR}/${BINARY}"
+  check_path "$INSTALL_DIR"
 }
 
 install_binary() {
