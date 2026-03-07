@@ -75,7 +75,6 @@ install_from_release() {
   [ -z "$asset_url" ] && return 1
 
   info "Downloading ${BINARY} ${tag} for ${OS}/${ARCH}..."
-  local tmpdir
   tmpdir="$(mktemp -d)"
   trap 'rm -rf "$tmpdir"' EXIT
 
