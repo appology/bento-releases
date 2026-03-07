@@ -68,7 +68,6 @@ install_from_release() {
     pkg_url="$(printf '%s' "$release_json" | grep "browser_download_url" | grep "$pkg_name" | head -1 | sed 's/.*"browser_download_url": *"//;s/".*//')"
     if [ -n "$pkg_url" ]; then
       info "Downloading ${BINARY} ${tag} for ${OS}/${ARCH}..."
-      local tmpdir
       tmpdir="$(mktemp -d)"
       trap 'rm -rf "$tmpdir"' EXIT
       local downloaded="${tmpdir}/${pkg_name}"
@@ -92,7 +91,6 @@ install_from_release() {
   [ -z "$asset_url" ] && return 1
 
   info "Downloading ${BINARY} ${tag} for ${OS}/${ARCH}..."
-  local tmpdir
   tmpdir="$(mktemp -d)"
   trap 'rm -rf "$tmpdir"' EXIT
 
