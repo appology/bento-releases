@@ -222,6 +222,11 @@ theme:
 | `Makefile` | Make | build |
 | `pyproject.toml` | Python | test |
 | `Gemfile` | Ruby | test |
+| `*.csproj` (Exe) | dotnet | build, run |
+| `*.csproj` (Web) | dotnet-web | build, run |
+| `*.csproj` (Test) | dotnet-test | build, test |
+
+> **Note:** .NET class libraries are skipped automatically.
 
 ### Init flags
 
@@ -229,7 +234,8 @@ theme:
 |---|---|
 | `--force` | Overwrite an existing config file |
 | `--depth=N` | Scan N levels deep for sub-projects (default: 1). Useful for monorepos with nested packages. |
-| `-i`, `--interactive` | Run the interactive setup wizard: choose a project name, icon, filename, select which modules/tasks/tabs to include. |
+| `--search=DIR[,DIR]` | Only scan specific directories (supports globs). |
+| `-i`, `--interactive` | Run the interactive setup wizard with smart directory/module pickers, icon selection, and tab review. |
 
 ## License
 
