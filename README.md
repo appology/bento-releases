@@ -17,7 +17,8 @@ Define your tasks in a single `bento.yaml`, then launch an interactive dashboard
 - **Themes** — 8 built-in color presets (default, catppuccin, dracula, nord, gruvbox, solarized, tokyo-night, rose-pine) with full override support
 - **Persistent state** — view mode, pane layout, and theme selection are saved across sessions
 - **Log export** — dump task output to timestamped log files
-- **Scaffold** — `bento init` auto-detects your project type and generates a starter config
+- **Scaffold** — `bento init` auto-detects your project type and generates a starter config, with optional interactive mode
+- **Custom config** — load a specific config file with `--config` instead of the default `bento.yaml`
 
 ## Install
 
@@ -49,6 +50,13 @@ To run against a specific directory:
 
 ```sh
 bento ./path/to/project
+```
+
+To load a specific config file:
+
+```sh
+bento --config=my-config.yaml
+bento -c ./configs/staging.yaml
 ```
 
 ## Configuration
@@ -215,7 +223,13 @@ theme:
 | `pyproject.toml` | Python | test |
 | `Gemfile` | Ruby | test |
 
-Use `--force` to overwrite an existing config.
+### Init flags
+
+| Flag | Description |
+|---|---|
+| `--force` | Overwrite an existing config file |
+| `--depth=N` | Scan N levels deep for sub-projects (default: 1). Useful for monorepos with nested packages. |
+| `-i`, `--interactive` | Run the interactive setup wizard: choose a project name, icon, filename, select which modules/tasks/tabs to include. |
 
 ## License
 
